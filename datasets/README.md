@@ -1,25 +1,25 @@
 ---
 
-## 📊 Data Format
+## 📊 Data Schema & Relationships
 
-### Fish Detection Data (`fish_data.csv`)
+### 1. Fish Detection Data (`fish_data.csv`)
 
-| Column | Type | Description |
-|--------|------|-------------|
-| `tagname` | string | Unique fish identifier |
-| `fish_id` | integer | Numeric fish ID |
-| `receiver_id` | integer/NA | Receiver where detected (NA if missing) |
-| `longitude` | numeric/NA | Detection longitude (NA if missing) |
-| `latitude` | numeric/NA | Detection latitude (NA if missing) |
-| `date` | date | Detection date |
-| `miss_id` | 0/1 | Binary: 0=observed, 1=missing |
+| Column | Data Type | Description |
+| :--- | :--- | :--- |
+| `tagname` | `string` | Unique alphanumeric identifier for each fish. |
+| `fish_id` | `integer` | Normalized numeric ID for computational efficiency. |
+| `receiver_id` | `int / NA` | ID of the station that recorded the ping. `NA` indicates a missing timestep. |
+| `longitude` | `num / NA` | Geographic longitude of the detection (Decimal Degrees). |
+| `latitude` | `num / NA` | Geographic latitude of the detection (Decimal Degrees). |
+| `date` | `datetime` | Timestamp of the detection event. |
+| `miss_id` | `binary` | **Indicator:** `0` = Observed detection; `1` = Missing/Hidden state. |
 
-### Receiver Location Data (`receiver_data.csv`)
+### 2. Receiver Location Data (`receiver_data.csv`)
 
-| Column | Type | Description |
-|--------|------|-------------|
-| `receiver_id` | integer | Unique receiver identifier |
-| `longitude` | numeric | Receiver longitude |
-| `latitude` | numeric | Receiver latitude |
+| Column | Data Type | Description |
+| :--- | :--- | :--- |
+| `receiver_id` | `integer` | Unique identifier matching the `fish_data` file. |
+| `longitude` | `numeric` | Static longitude of the physical receiver station. |
+| `latitude` | `numeric` | Static latitude of the physical receiver station. |
 
 ---
