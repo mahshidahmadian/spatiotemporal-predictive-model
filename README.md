@@ -28,9 +28,9 @@ If you use this code in your research, please cite:
 
 ```
 ├── R/
-│   └──  R_Functions.R          # Core R functions
+│   └──  R_Functions.R          # R functions
 ├── C++/
-│   └── CPP_Functions.cpp      # C++ acceleration
+│   └── CPP_Functions.cpp      # C++ codes
 ├── datasets/
 │   ├── fish_data.csv          # Detection data
 │   └── receiver_data.csv      # Receiver locations
