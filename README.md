@@ -40,12 +40,6 @@ If you use this code in your research, please cite:
 
 ---
 
-## 🙏 Acknowledgments
-
-This research was supported by the Virginia Sea Grant through a Graduate Fellowship
-
----
-
 ## 📬 Contact
 
 For questions about the code/methodology or collaboration:
