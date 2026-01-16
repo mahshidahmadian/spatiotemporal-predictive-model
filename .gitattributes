@@ -1,3 +1,20 @@
+# GitHub Language Detection
 *.R linguist-language=R
+*.r linguist-language=R
 *.cpp linguist-language=C++
 *.h linguist-language=C++
+*.hpp linguist-language=C++
+
+# Line endings
+*.R text eol=lf
+*.cpp text eol=lf
+*.md text eol=lf
+*.csv text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+*.rds binary
+*.RData binary
