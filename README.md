@@ -23,3 +23,18 @@ If you use this code in your research, please cite:
 ```
 
 ---
+
+## 📁 Repository Structure
+
+```
+├── src/
+│   ├── R_Functions.R          # Core R functions
+│   └── CPP_Functions.cpp      # C++ acceleration
+├── data/
+│   ├── fish_data.csv          # Detection data
+│   └── receiver_data.csv      # Receiver locations
+└── examples/
+    └── example_analysis.R     # Complete example
+```
+
+---
