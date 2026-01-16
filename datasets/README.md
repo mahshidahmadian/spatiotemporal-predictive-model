@@ -1,5 +1,3 @@
----
-
 ## 📊 Data Format
 
 ### Fish Detection Data (`fish_data.csv`)
