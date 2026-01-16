@@ -4,7 +4,7 @@ This repository includes codes (R/C++) of a model for reconstructing continuous 
 
 ---
 
-## 📄 Publication
+## Publication
 
 **Paper:** [A New Perspective to Fish Trajectory Imputation: A Methodology for Spatiotemporal Modeling of Acoustically Tagged Fish Data]([link-to-paper](https://arxiv.org/abs/2408.13220))
 
@@ -24,7 +24,7 @@ If you use this code in your research, please cite:
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 ├── R/
@@ -40,7 +40,7 @@ If you use this code in your research, please cite:
 
 ---
 
-## 📬 Contact
+## Contact
 
 For questions about the code/methodology or collaboration:
 - Email: [ahmadianm@vcu.edu]
