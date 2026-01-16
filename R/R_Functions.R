@@ -23,17 +23,7 @@
 #' based on step length (*D*) and turning angle (*psi*), constrained by 
 #' receiver proximity and land boundaries.
 #'
-#' @param prev_step Previous location [lon, lat]
-#' @param receiver_cors Matrix of receiver coordinates
-#' @param theta1 Target bearing (radians)
-#' @param sigma_psi Standard deviation of turning angle
-#' @param sigma_d Standard deviation of step length
-#' @param r Receiver detection radius
-#' @param mu_d Mean step length
-#' @param ocean Coastline shapefile (sf object)
-#' @param line_buffer Buffer distance for line geometries (meters)
-#' 
-#'
+
 generate_valid_move <- function(prev_step, reciever_cors, theta1, sigma_psi, sigma_d, 
                                 r, mu_d, ocean, line_buffer) {
   
@@ -144,19 +134,9 @@ check_land_constraint <- function(location_coord, coast_shape,
 }
 
 #------------------------------------------------------------------------------#
-
-#' Impute Position Around Receiver
-#' 
 #' @description
-#' this generates a position near a receiver using rejection sampling from
+#' This generates a position near a receiver using rejection sampling from
 #' a bivariate normal distribution constrained by detection radius.
-#' 
-#' @param R_lon Receiver longitude
-#' @param R_lat Receiver latitude
-#' @param Sigma_R Covariance matrix for detection error
-#' @param radius Detection radius constraint
-#' 
-#' @return Vector [lon, lat] within radius of receiver
 
 impute_receiver_observed <- function(R_lon, R_lat, Sigma_R, radius) {
   R_cor <- c(R_lon, R_lat)
@@ -190,24 +170,6 @@ log_like_pos <- function(N_matrix, R_matrix, sigma_R) {
   return(loglik1 + loglik2)
 }
 #--------------------------------------------------------------------#
-get_z_params <- function(theta1, sigma_psi) {
-  # Mean Vector Approximation
-  mu_z <- c(cos(theta1) * (1 - 0.5 * sigma_psi),
-            sin(theta1) * (1 - 0.5 * sigma_psi))
-  
-  # Variance-Covariance Matrix Approximation
-  s2 <- sigma_psi
-  s4 <- sigma_psi^2
-  c1 <- cos(theta1)
-  sn <- sin(theta1)
-  
-  v11 <- (sn^2 * s2) + (0.5 * c1^2 * s4)
-  v12 <- (-c1 * sn * s2) + (0.5 * c1 * sn * s4)
-  v22 <- (c1^2 * s2) + (0.5 * sn^2 * s4)
-  
-  return(list(mu = mu_z, sigma = matrix(c(v11, v12, v12, v22), 2, 2)))
-}
-#--------------------------------------------------------------------#
 log_like_z <- function(X_curr, X_prev, D, theta1, sigma_psi) {
   params <- get_z_params(theta1, sigma_psi)
   mean1 <- X_prev + abs(D) * params$mu
@@ -227,111 +189,6 @@ gap_count <- function(miss_id) {
     gap1 <- c(gap1, sum(miss_id[(zeros1[j] + 1):(zeros1[j + 1] - 1)] == 1))
   }
   return(gap1)
-}
-
-#--------------------------------------------------------------------#
-#' Reduce angle to [0, 2*pi) range
-reduce_radian <- function(theta) {
-  reduced_angle <- theta %% (2 * pi)
-  return(reduced_angle)
-}
-#--------------------------------------------------------------------#
-
-#' Calculate Euclidean distance between two points
-euc_distance <- function(x1, y1, x2, y2) {
-  d <- sqrt(((x2 - x1)^2) + ((y2 - y1)^2))
-  return(d)
-}
-#--------------------------------------------------------------------#
-
-#' Find angle of a direction vector
-#' @param dir1 A 1x2 matrix with direction components [dx, dy]
-#' @return Angle in radians [0, 2*pi)
-angle_finder <- function(dir1){
-  if((dir1[1,2]==0) & (dir1[1,1]<0)){
-    dir1r <- ((3*pi)/2)
-  }else if((dir1[1,2]==0) & (dir1[1,1]>0)){
-    dir1r <- (pi/2)
-  }else if((dir1[1,1]==0) & (dir1[1,2]>0)){
-    dir1r <- 0
-  }else if((dir1[1,1]==0) & (dir1[1,2]<0)){
-    dir1r <- (pi)
-  }else if((dir1[1,2]>0) & (dir1[1,1]<0)){         #2nd Quarter
-    dir1r <- (atan( dir1[1,2]/dir1[1,1])) + pi
-  }else if((dir1[1,2]<0) & (dir1[1,1]<0)){         #3rd Quarter
-    dir1r <- (atan( dir1[1,2]/dir1[1,1])) + pi
-  }else if((dir1[1,2]<0) & (dir1[1,1]>0)){         #4th Quarter
-    dir1r <- (atan( dir1[1,2]/dir1[1,1])) + (2*pi)
-  }else{                                           #1st Quarter
-    dir1r <- (atan( dir1[1,2]/dir1[1,1]))
-  }
-  return(dir1r)
-}
-#--------------------------------------------------------------------#
-#--------------------------------------------------------------------#
-library(ggplot2)
-library(ggforce)
-library(sf)
-library(reshape2)
-
-plot_Cobia <- function(seen_locs, Receivers_cors, Res1, coastline_sf, zoom1, r, Receiver_numbers) {
-  
-  # Receiver and gap circles
-  receiver_circles <- data.frame(
-    x0 = Receivers_cors[, 1],
-    y0 = Receivers_cors[, 2],
-    r = r
-  )
-  
-  gap_circles <- data.frame(
-    x0 = seen_locs[, 1],
-    y0 = seen_locs[, 2],
-    r = r
-  )
-  
-  # Crop coastline to bounding box with padding
-  bbox <- st_bbox(c(
-    xmin = min(seen_locs[, 1]) - zoom1,
-    xmax = max(seen_locs[, 1]) + zoom1,
-    ymin = min(seen_locs[, 2]) - zoom1,
-    ymax = max(seen_locs[, 2]) + zoom1
-  ), crs = st_crs(coastline_sf))
-  coastline_crop <- st_crop(coastline_sf, bbox)
-  
-  # FIXED: More robust reshaping
-  Res1_long <- melt(Res1)
-  colnames(Res1_long) <- c("step", "coord", "imp", "value")
-  
-  # Use dcast instead of reshape for reliability
-  Res1_wide <- dcast(Res1_long, step + imp ~ coord, value.var = "value")
-  colnames(Res1_wide) <- c("step", "imp", "x", "y")
-  
-  # Plot
-  ggplot() +
-    geom_sf(data = coastline_crop, fill = "palegreen4", color = "coral4", linewidth = 0.3) +
-    geom_point(data = Res1_wide, aes(x = x, y = y), 
-               color = alpha("burlywood3", 0.6), size = 1) +
-    geom_point(data = as.data.frame(gap_circles), aes(x = x0, y = y0), 
-               color = "lightblue", size = 2) +
-    geom_point(data = as.data.frame(receiver_circles), aes(x = x0, y = y0),
-               shape = 21, fill = "red", color = "black", size = 0.75) +
-    geom_circle(data = receiver_circles, aes(x0 = x0, y0 = y0, r = r), 
-                color = "blue", linewidth = 0.5) +
-    geom_circle(data = gap_circles, aes(x0 = x0, y0 = y0, r = r), 
-                color = "navy", fill = alpha("maroon", 0.4), linewidth = 0.5) +
-    geom_text(data = gap_circles, aes(x = x0, y = y0, label = Receiver_numbers),
-              vjust = -1, color = 'black', size = 5) +
-    coord_sf(xlim = c(bbox["xmin"], bbox["xmax"]),
-             ylim = c(bbox["ymin"], bbox["ymax"]),
-             expand = FALSE) +
-    labs(x = "Longitude", y = "Latitude") +
-    theme_minimal() +
-    theme(
-      panel.background = element_rect(fill = "lightblue1", color = NA),
-      panel.grid = element_blank(),
-      axis.title = element_text(size = 25, face = "bold"),
-      axis.text = element_text(size = 15, face = "bold")
-    )
 }
 #--------------------------------------------------------------------#
 cobia_map <- function(Imputed_points, Receivers_cors, receiver_labels = NULL) {
@@ -396,4 +253,5 @@ cobia_map <- function(Imputed_points, Receivers_cors, receiver_labels = NULL) {
   
   return(map_imp)
 }
+
 #--------------------------------------------------------------------#
