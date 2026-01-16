@@ -39,3 +39,16 @@ If you use this code in your research, please cite:
 ```
 
 ---
+
+## 🙏 Acknowledgments
+
+This research was supported by the Virginia Sea Grant througha Graduate Fellowship
+
+---
+
+## 📬 Contact
+
+For questions about the code and methodology or collaboration:
+- Email: [ahmadianm@vcu.edu]
+
+---
