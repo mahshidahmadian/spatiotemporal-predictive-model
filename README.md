@@ -1,6 +1,6 @@
 # Spatiotemporal Predictive Model
 
-This repository introduces a novel Bayesian model for reconstructing continuous movement trajectories from sparse acoustic telemetry observations, with applications to marine fish tracking and animal movement analysis.
+This repository includes codes (R/C++) of a model for reconstructing continuous movement trajectories from sparse acoustic telemetry observations, with applications to marine animal tracking.
 
 ---
 
