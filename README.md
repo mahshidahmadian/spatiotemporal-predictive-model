@@ -13,12 +13,10 @@ If you use this code in your research, please cite:
 @article{2026spatiotemporal,
   title={A New Perspective to Fish Trajectory Imputation: A Methodology for Spatiotemporal Modeling of Acoustically Tagged Fish Data},
   author={Mahshid Ahmadian, Edward L. Boone, Grace S. Chiu, Kevin C. Weng},
-  journal={TBD},
+  journal={Journal of Applied Statistics: Environmental Statistics and Data Science},
   year={2026},
   note={Accepted for publication. Preprint available at arXiv:2408.13220},
-  url={https://arxiv.org/abs/2408.13220},
-  eprint={2408.13220},
-  archivePrefix={arXiv}
+  url={https://doi.org/10.1080/29984688.2026.2623273}
 }
 ```
 
