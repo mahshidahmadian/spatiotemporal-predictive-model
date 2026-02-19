@@ -33,7 +33,7 @@ If you use this code in your research, please cite:
 │   └── receiver_data.csv      # Receiver locations
 └── examples/
 │   └── example_analysis.R     # Complete example
-└── Manuscript version of paper.pdf/
+└── ahmadian-et-al-2026.pdf    #Manuscript version of paper
 ```
 
 ---
