@@ -6,7 +6,7 @@ This repository includes codes (R/C++) of a model for reconstructing continuous 
 
 ## Publication
 
-**Paper:** [A New Perspective to Fish Trajectory Imputation: A Methodology for Spatiotemporal Modeling of Acoustically Tagged Fish Data]([link-to-paper](https://arxiv.org/abs/2408.13220))
+**Paper:** [A New Perspective to Fish Trajectory Imputation: A Methodology for Spatiotemporal Modeling of Acoustically Tagged Fish Data]([link-to-paper](https://doi.org/10.1080/29984688.2026.2623273)). Note that the manuscript version of this paper is available in the repository.
 
 If you use this code in your research, please cite:
 ```bibtex
@@ -33,7 +33,8 @@ If you use this code in your research, please cite:
 │   ├── fish_data.csv          # Detection data
 │   └── receiver_data.csv      # Receiver locations
 └── examples/
-    └── example_analysis.R     # Complete example
+│   └── example_analysis.R     # Complete example
+└── Manuscript version of paper.pdf/
 ```
 
 ---
